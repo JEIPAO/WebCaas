@@ -1,0 +1,194 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+Auth::routes();
+
+Route::get('/home', function(){
+    return redirect()->route('dashboard');
+});
+
+/******** Dashboard Controller *********/
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/home', function(){
+        return redirect()->route('dashboard');
+    });
+    Route::get('/dashboard','DashboardController@index')->name('dashboard');
+    Route::get('/getData/{item}','DashboardController@getData')->name('filter');
+});
+
+/******** Dashboard Controller *********/
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/home', function(){
+        return redirect()->route('dashboard');
+    });
+    Route::get('/dashboard','DashboardController@index')->name('dashboard');
+    Route::get('/getData/{item}','DashboardController@getData')->name('filter');
+});
+
+/******** Client Information File Controller *********/
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/show/cif/{id?}','CIFController@show')->name('cif.show');
+    // Route::post('/create/cif', 'CIFController@store')->name('cif.create');    
+    Route::get('/edit/cif', 'CIFController@edit')->name('cif.edit');     
+    Route::get('/getCIFInfo','CIFController@getCIFDetails')->name('getCIF'); 
+    Route::get('/getMasterList/{id?}','CIFController@getMasterList')->name('getCIFforConfirmation');
+    Route::get('/getByAdmin','CIFController@getByAdmin')->name('getByAdmin');
+    Route::post('/cif/save','CIFController@store')->name('save_cif');
+});
+    Route::get('/test','CIFController@test')->name('getByAdmin');
+/******** Credit Risk Management Controller *********/
+
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/create/crm','CRMController@create')->name('crm.file');
+    Route::get('/show/crm/{id?}','CRMController@show')->name('crm.show');
+    Route::get('/getCRMInfo/{id?}','CRMController@getCreditRiskManagementDetails')->name('getCRM');
+    // Route::post('/create/cif', 'CIFController@store')->name('cif.create');      
+    Route::post('/crm/save','CRMController@save_desired_loan_amount')->name('save_desired_loan_amount');
+});
+
+/******** CoMaker Profile Controller *********/
+    Route::group(['middleware'=> 'auth'], function(){
+    // Route::get('/create/comaker_profile','Comaker_profileController@create')->name('Comaker_profile.file');
+    Route::get('/show/comaker_profile/{id?}','Comaker_profileController@show')->name('comaker_profile.show');
+    Route::get('/getComaker_profileInfo/{id?}','Comaker_profileController@getComakerProfileDetails')->name('getComaker_profile');
+    // Route::post('/create/cif', 'CIFController@store')->name('cif.create');      
+    // Route::post('/Comaker_profile/save','Comaker_profileController@save_desired_loan_amount')->name('save_desired_loan_amount');
+});
+
+/******** Spot Check Controller *********/
+Route::group(['middleware'=> 'auth'], function(){
+    // Route::get('/create/spotcheck','SpotCheckController@create')->name('spotcheck.file');
+    Route::get('/show/spotcheck/{id?}','SpotCheckController@show')->name('spotcheck.show');
+    Route::get('/getSpotCheckInfo/{id?}','SpotCheckController@getSpotCheckDetails')->name('getSpotcheck');
+    
+});
+
+/******** Credit and Source of Income Controller *********/
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/show/csi/{code}/{id?}','CSIController@show')->name('csi.show'); 
+    Route::get('/getHCSIInfo/{id?}','CSIController@getHCSI')->name('getHCSI'); 
+    Route::get('/getCreditInfo/{id?}','CSIController@getCreditInfo')->name('getCreditInfo');     
+    Route::get('/getPOIInfo/{id?}','CSIController@getPOIInfo')->name('getPOIInfo'); 
+    Route::get('/getLoanRecApproval/{id?}','CSIController@getLoanRecApproval')->name('getLoanRecAprroval');
+    Route::get('/getMFSRInfo/{id?}','CSIController@getMFSRInfo')->name('getMFSRInfo');
+    Route::get('/getExecomInfo/{id?}','CSIController@getExecomInfo')->name('getExecomInfo');
+    Route::get('/getBracket','CSIController@getBracket')->name('getBracket');
+    Route::post('/update/msSignOff','CSIController@msSignOff')->name('MSSignOff');
+    Route::post('/update/msConfirm','CSIController@msConfirm')->name('msConfirm');
+    Route::post('/update/branchSignOff','CSIController@branchCrecomSignOff')->name('branchSignOff');
+    Route::post('/update/cashierSignOff','CSIController@cashierSignOff')->name('cashierSignOff');
+    Route::post('/update/branchSBLSignOff','CSIController@branchSBLSignOff')->name('branchSBLSignOff');
+    Route::post('/update/sbhSignOff','CSIController@sbhSignOff')->name('sbhSignOff'); 
+    Route::post('/update/sbhConfirm','CSIController@sbhConfirm')->name('sbhConfirm'); 
+    Route::post('/update/sbhforfile','CSIController@sbhforfile')->name('sbhforfile'); 
+    Route::post('/update/branchSignOff','CSIController@branchSignOff')->name('branchSignOff');
+    Route::post('/update/bankSignOff','CSIController@bankCrecomSignOff')->name('bankSignOff');
+    Route::post('/update/execomSignOff','CSIController@execomSignOff')->name('execomSignOff');
+    Route::get('/getApprovingAuthority', 'CSIController@getApprovingAuthority')->name('getApprovingAuthority');
+    Route::get('/getHoldoutParam','CSIController@getHoldoutParam')->name('getHoldoutParam');
+    Route::get('/getHCSI','CSIController@getHCSIInfo')->name('getHCSIINfo');
+    Route::post('/saveHCSI','CSIController@saveHCSI')->name('saveHCSI');
+    Route::get('/checkCashier','CSIController@checkCashier')->name('checkCashier');
+    Route::get('/isBracket','CSIController@isBracket')->name('isBracket');
+});
+
+
+
+
+
+/******** Barangay Controller *********/
+
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/getBarangay','BarangayController@getBarangayByMunicipality')->name('getBarangay');
+    Route::get('/getMunicipality','BarangayController@getMunicipalityByRegion')->name('getMunicipality');
+});
+
+/******** Sitio Controller *********/
+
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/getSitio/{brgy}/{mun}','SitioController@getSitioByBarangay')->name('getSitio');
+});
+ 
+
+
+/******** API Controller *********/
+
+    Route::get('/test/api/{branchcode}/{CIFNo}', 'APIController@sendToTemenus')->name('test');
+    Route::get('/test/api2' ,'APIController@test')->name('test3');
+    Route::get('/test/getLoans' ,'APIController@getBasicDepositLoans')->name('test2');
+    Route::get('/test/api5',function() {
+        return view('welcome');
+    });
+    Route::get('/test/api4','APIController@test4')->name('test4');
+    
+    
+/******** Reports Controller *********/
+
+Route::group(['middleware'=> 'auth'], function(){
+    Route::get('/reports', 'ReportsController@index')->name('reports.index');
+    Route::get('/reports/list_of_all_clients','ReportsController@list_of_all_clients')->name('list_of_all_clients');
+    Route::get('/reports/list_of_clients_for_mo','ReportsController@list_of_clients_for_mo')->name('list_of_clients_for_mo');
+    Route::get('/reports/list_of_clients_for_ms','ReportsController@list_of_clients_for_ms')->name('list_of_clients_for_ms');
+    Route::get('/reports/cif_monitoring_for_cats','ReportsController@cif_monitoring_for_cats')->name('cif_monitoring_for_cats');
+    Route::get('/reports/list_of_accounts_for_release','ReportsController@list_of_accounts_for_release')->name('list_of_accounts_for_release');
+    Route::get('/reports/list_of_accounts_for_confirmation','ReportsController@list_of_accounts_for_confirmation')->name('list_of_accounts_for_confirmation');
+    Route::get('/reports/list_of_confirmed_accounts_for_loan_releasing','ReportsController@list_of_confirmed_accounts_for_loan_releasing')->name('list_of_confirmed_accounts_for_loan_releasing');
+    Route::get('/reports/list_of_accounts_for_center_chief_endorsement','ReportsController@list_of_accounts_for_center_chief_endorsement')->name('list_of_accounts_for_center_chief_endorsement');
+    Route::get('/reports/previewCIF','ReportsController@previewCIF')->name('previewCIF');
+    Route::get('/reports/previewCashFlow','ReportsController@previewCashFlow')->name('previewCashFlow');
+    Route::get('/reports/previewScoring','ReportsController@previewScoring')->name('previewScoring');
+    Route::get('/reports/previewCGTCRT','ReportsController@previewCGTCRT')->name('previewCGTCRT');
+
+});
+
+/******** User Controller *********/
+
+Route::group(['middleware' => ['auth'] , 'prefix'=> 'user', 'as' => 'user.'], function() {
+    Route::get('/show','UserController@show')->name('index');
+    Route::get('/index','UserController@index')->name('show');
+    Route::get('/edit/{id}','UserController@edit')->name('edit');
+    Route::post('/update', 'UserController@update')->name('update');
+    Route::post('/create','UserController@store')->name('store');
+    Route::post('/delete','UserController@delete')->name('delete');
+    Route::get('/profile','UserController@profile')->name('profile');
+    Route::get('/search','UserController@search')->name('search');
+    Route::get('/roles','UserController@roles')->name('getRoles');
+    Route::get('/getUsers','UserController@getUsers')->name('getUsers');
+});
+ 
+
+/******** Approver Controller *********/
+
+Route::group(['middleware' => ['auth'] , 'prefix'=> 'approver', 'as' => 'approver.'], function() {
+    Route::get('/show','ApproverController@index')->name('index');
+    Route::get('/index','UserController@index')->name('show');
+    Route::get('/edit','ApproverController@edit')->name('edit');
+    Route::post('/update', 'ApproverController@update')->name('update');
+    Route::post('/create','ApproverController@store')->name('store');
+    Route::post('/delete','ApproverController@delete')->name('delete');
+    Route::get('/profile','UserController@profile')->name('profile');
+    Route::get('/search','UserController@search')->name('search');
+    Route::get('/getUsers','ApproverController@getUsers')->name('getUsers');
+    Route::get('/getApprovers','ApproverController@getApprovers')->name('getApprovers');
+});
+ 
+
+
+
+
+
+
